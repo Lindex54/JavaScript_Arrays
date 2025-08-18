@@ -251,3 +251,22 @@ const movementsDescriptons = movements.map(
 );
 
 // console.log(movementsDescriptons);
+
+const deposits = movements.filter(function (mov) {
+  return mov > 0;
+});
+// console.log(movements);
+// console.log(deposits);
+
+// Alternative
+const depositsFor = [];
+for (const mov of movements) if (mov > 0) depositsFor.push(mov);
+
+const withdrawals = movements.filter(function (mov) {
+  return mov < 0;
+});
+
+const balance = movements.reduce(function (acc, cur, i, arr) {
+  console.log(`Iteration ${i}: ${acc}`);
+  return acc + cur;
+}, 0);
