@@ -62,8 +62,10 @@ const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
 const displayMovements = function (movements) {
+  containerMovements.innerHTML = '';
+
   movements.forEach(function (mov, i) {
-    const type = mov > 0 ? 'deposite' : 'withdraw';
+    const type = mov > 0 ? 'deposit' : 'withdrawal';
 
     const html = `
        <div class="movements__row">
@@ -79,6 +81,27 @@ const displayMovements = function (movements) {
   });
 };
 displayMovements(account1.movements);
+
+// const createUsernames = function (user) {
+//   const username = user
+//     .toLowerCase()
+//     .split(' ')
+//     .map(name => name[0])
+//     .join('');
+//   return username;
+// };
+
+const createUsernames = function (accs) {
+  accs.forEach(function (acc) {
+    acc.username = acc.owner
+      .toLowerCase()
+      .split(' ')
+      .map(name => name[0])
+      .join('');
+  });
+};
+createUsernames(accounts);
+// console.log(accounts);
 
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
@@ -119,7 +142,7 @@ console.log(letters);
 console.log(letters.join('-'));
 */
 
-const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+// const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
 
 // for (const movement of movements) {
 //   if (movement > 0) {
@@ -187,3 +210,44 @@ currenciesUnique.forEach(function (value, _, map) {
   console.log(`${value}: ${value}`);
 });
 */
+// Challenge ////////////////////////////////////
+const checkDogs = function (dogsJulia, dogsKate) {
+  const dogsjuliaCorrected = dogsJulia.slice();
+  dogsjuliaCorrected.splice[(0, 1)];
+  dogsjuliaCorrected.splice(-2);
+  const dogs = dogsjuliaCorrected.concat(dogsKate);
+  // console.log(dogsjuliaCorrected);
+
+  dogs.forEach(function (dog, i) {
+    if (dog >= 3) {
+      // console.log(`Dog number ${i + 1} is an adult, and is ${dog} years old`);
+    } else {
+      // console.log(`Dog number ${i + 1} is still a puppy`);
+    }
+  });
+};
+
+checkDogs([3, 5, 2, 12, 7], [4, 1, 15, 8, 3]);
+
+const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+
+const eurToUsd = 1.1;
+
+const movementUSD = movements.map(function (mov) {
+  return mov * eurToUsd;
+});
+
+const movementUSDArrow = movements.map(mov => mov * eurToUsd);
+// console.log(movementUSDArrow);
+
+const movementUSDfor = [];
+for (const mov of movements) movementUSDfor.push(mov * eurToUsd);
+
+const movementsDescriptons = movements.map(
+  (mov, i, arr) =>
+    `Movement ${i + 1}: You ${mov > 0 ? 'deposited' : 'withdrew'} ${Math.abs(
+      mov
+    )}`
+);
+
+// console.log(movementsDescriptons);
