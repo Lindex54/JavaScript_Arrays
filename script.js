@@ -72,7 +72,7 @@ const displayMovements = function (movements) {
           <div class="movements__type movements__type--${type}">${
       i + 1
     } ${type}</div>
-          <div class="movements__value">${mov}</div>
+          <div class="movements__value">${mov}€</div>
         </div>
 
     `;
@@ -91,6 +91,25 @@ displayMovements(account1.movements);
 //   return username;
 // };
 
+const calDisplaySummary = function (movements) {
+  const incomes = movements
+    .filter(mov => mov > 0)
+    .reduce((acc, mov) => acc + mov, 0);
+  labelSumIn.textContent = `${incomes}€`;
+
+  const incomesout = movements
+    .filter(mov => mov < 0)
+    .reduce((acc, mov) => acc + mov, 0);
+  labelSumOut.textContent = `${Math.abs(incomesout)}€`;
+
+  const interest = movements
+    .filter(mov => mov > 0)
+    .map(deposit => (deposit * 1.2) / 100)
+    .reduce((acc, int) => acc + int, 0);
+  labelSumInterest.textContent = `${Math.abs(interest)}€`;
+};
+calDisplaySummary(account1.movements);
+
 const createUsernames = function (accs) {
   accs.forEach(function (acc) {
     acc.username = acc.owner
@@ -101,6 +120,12 @@ const createUsernames = function (accs) {
   });
 };
 createUsernames(accounts);
+
+const calcPrintBalance = function (movements) {
+  const balance = movements.reduce((acc, mov) => acc + mov, 0);
+  labelBalance.textContent = `${balance} €`;
+};
+calcPrintBalance(account1.movements);
 // console.log(accounts);
 
 /////////////////////////////////////////////////
@@ -266,7 +291,40 @@ const withdrawals = movements.filter(function (mov) {
   return mov < 0;
 });
 
-const balance = movements.reduce(function (acc, cur, i, arr) {
-  console.log(`Iteration ${i}: ${acc}`);
-  return acc + cur;
-}, 0);
+// Reduce method
+// const balance = movements.reduce(function (acc, cur, i, arr) {
+//   // console.log(`Iteration ${i}: ${acc}`);
+//   return acc + cur;
+// }, 0);
+
+const balance = movements.reduce((acc, cur) => acc + cur, 0);
+
+// Alternative for reduce method
+let bal2 = 0;
+for (const mov of movements) bal2 += mov;
+
+// using reduce to return thw maz
+const max = movements.reduce((acc, mov) => {
+  if (acc > mov) return acc;
+  else return mov;
+}, movements[0]);
+
+//////////////////////////////////////////////////////////////////////////////
+const calAverageHumanAge = function (ages) {
+  const hunmanAge = ages.map(age => (age <= 2 ? 2 * age : 16 + age * 4));
+  const adults = hunmanAge.filter(age => age >= 18);
+  // console.log(hunmanAge);
+  // console.log(adults);
+
+  const average = adults.reduce((acc, age) => acc + age, 0) / adults.length;
+  return average;
+};
+const avg1 = calAverageHumanAge([5, 2, 4, 1, 15, 8, 3]);
+// console.log(avg1);
+
+const euroToUSD = 1.1;
+const totalDepositUSD = movements
+  .filter(mov => mov > 0)
+  .map(mov => mov * eurToUsd)
+  .reduce((acc, mov) => acc + mov, 0);
+console.log(totalDepositUSD);
