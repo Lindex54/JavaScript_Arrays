@@ -110,9 +110,9 @@ const calDisplaySummary = function (acc) {
 };
 // calDisplaySummary(account1.movements);
 
-const calcDisplayBalance = function (movements) {
-  const balance = movements.reduce((acc, mov) => acc + mov, 0);
-  labelBalance.textContent = `${balance} €`;
+const calcDisplayBalance = function (acc) {
+  acc.balance = acc.movements.reduce((acc, mov) => acc + mov, 0);
+  labelBalance.textContent = `${acc.balance} €`;
 };
 
 const createUsernames = function (accs) {
@@ -125,6 +125,17 @@ const createUsernames = function (accs) {
   });
 };
 createUsernames(accounts);
+
+const updateUi = function (acc) {
+  // Display movements
+  displayMovements(acc.movements);
+
+  // Diplay balance
+  calcDisplayBalance(acc);
+
+  // Display Summary
+  calDisplaySummary(acc);
+};
 
 let currentAccount;
 
@@ -147,14 +158,8 @@ btnLogin.addEventListener('click', function (e) {
     inputLoginUsername.value = inputLoginPin.value = '';
     inputLoginPin.blur();
 
-    // Display movements
-    displayMovements(currentAccount.movements);
-
-    // Diplay balance
-    calcDisplayBalance(currentAccount.movements);
-
-    // Display Summary
-    calDisplaySummary(currentAccount);
+    // update ui
+    updateUi(currentAccount);
 
     // console.log('LOGIN');
   }
@@ -166,6 +171,43 @@ btnTransfer.addEventListener('click', function (e) {
   const receiverAcc = accounts.find(
     acc => acc.username === inputTransferTo.value
   );
+
+  inputTransferAmount.value = inputTransferTo.value = '';
+
+  if (
+    amount > 0 &&
+    receiverAcc &&
+    currentAccount.balance >= amount &&
+    receiverAcc?.username !== currentAccount.username
+  ) {
+    // Doing the transfer
+    currentAccount.movements.push(-amount);
+    receiverAcc.movements.push(amount);
+    // console.log('Trasnfer valid');
+
+    // update UI
+    updateUi(currentAccount);
+  }
+});
+
+btnClose.addEventListener('click', function (e) {
+  e.preventDefault();
+
+  if (
+    inputCloseUsername.value === currentAccount.username &&
+    Number(inputClosePin.value) === currentAccount.pin
+  ) {
+    const index = accounts.findIndex(
+      acc => acc.username === currentAccount.username
+    );
+
+    accounts.splice(index, 1);
+
+    // Hide UI
+    containerApp.style.opacity = 0;
+  }
+
+  inputCloseUsername.value = inputClosePin.value = '';
 });
 
 // calcDisplayBalance(account1.movements);
@@ -394,4 +436,4 @@ const calAverageHumanAge2 = ages =>
 const firstWithdrawal = movements.find(mov => mov < 0);
 // console.log(firstWithdrawal);
 const account = accounts.find(acc => acc.owner === 'Jessica Davis');
-console.log(account);
+// console.log(account);
