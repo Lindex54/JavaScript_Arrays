@@ -468,23 +468,39 @@ const anyDeposites = movements.some(mov => mov > 0);
 /////////////////////////////////////////////////////////////
 // flat and flatmap
 const arr = [[1, 2, 3], [4, 5, 6], 7, 8];
-console.log(arr.flat());
+// console.log(arr.flat());
 
 const arrDeep = [
   [[1, 2], 3],
   [[4, [5, 6]], 7, 8],
 ];
-console.log(arrDeep.flat(3));
+// console.log(arrDeep.flat(3));
 
-const accountMovements = accounts.map(acc => acc.movements);
-console.log(accountMovements);
-const allMovements = accountMovements.flat();
-console.log(allMovements);
+// const accountMovements = accounts.map(acc => acc.movements);
+// console.log(accountMovements);
+// const allMovements = accountMovements.flat();
+// console.log(allMovements);
 
-const overlBalance = allMovements.reduce((acc, mov) => acc + mov, o);
-console.log(overlBalance);
-
+// flat
 const overlBalance = accounts
   .map(acc => acc.movements)
   .flat()
   .reduce((acc, mov) => acc + mov, 0);
+// console.log(overlBalance)
+
+// flatmap only goes one method deep
+const overlBalance2 = accounts
+  .flatMap(acc => acc.movements)
+  .reduce((acc, mov) => acc + mov, 0);
+
+// sort method mutates the original array
+const owners = ['Jonas', 'Zach', 'Adam', 'Martha'];
+console.log(owners.sort());
+
+// return < 0, A, B (keep order)
+// return > 0, B, A (switch order)
+movements.sort((a, b) => {
+  if (a > b) return 1;
+  if (b > a) return -1;
+});
+console.log(movements);
