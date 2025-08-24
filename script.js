@@ -456,11 +456,35 @@ const account = accounts.find(acc => acc.owner === 'Jessica Davis');
 ////////////////////////////////////////////////////////////////////////////
 
 // Some and Every Method
-console.log(movements);
+// console.log(movements);
 
 // Eqquality
-console.log(movements.includes(-130));
+// console.log(movements.includes(-130));
 
 // Condition
 const anyDeposites = movements.some(mov => mov > 0);
-console.log(anyDeposites);
+// console.log(anyDeposites);
+
+/////////////////////////////////////////////////////////////
+// flat and flatmap
+const arr = [[1, 2, 3], [4, 5, 6], 7, 8];
+console.log(arr.flat());
+
+const arrDeep = [
+  [[1, 2], 3],
+  [[4, [5, 6]], 7, 8],
+];
+console.log(arrDeep.flat(3));
+
+const accountMovements = accounts.map(acc => acc.movements);
+console.log(accountMovements);
+const allMovements = accountMovements.flat();
+console.log(allMovements);
+
+const overlBalance = allMovements.reduce((acc, mov) => acc + mov, o);
+console.log(overlBalance);
+
+const overlBalance = accounts
+  .map(acc => acc.movements)
+  .flat()
+  .reduce((acc, mov) => acc + mov, 0);
